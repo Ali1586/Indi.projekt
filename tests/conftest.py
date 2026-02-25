@@ -1,9 +1,11 @@
-# tests/conftest.py
 import pytest
+from unittest.mock import Mock
 
 @pytest.fixture
-def synthetic_user():
-    return {
-        "pnr": "19121212-1212", # Skatteverkets testnummer
-        "name": "Test Testsson"
-    }
+def mock_api_response():
+    """Fixture som skapar ett standardiserat mock-svar för API:et."""
+    mock = Mock()
+    mock.status_code = 200
+    mock.headers = {"Content-Type": "application/json"}
+    mock.json.return_value = [{"id": 1, "amount": 5000, "status": "approved"}]
+    return mock

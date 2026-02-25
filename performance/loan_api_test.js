@@ -3,11 +3,10 @@ import { check, sleep } from 'k6';
 
 export default function () {
   // Ersätt med din faktiska URL (t.ex. http://localhost:5000/api/loans)
-  const res = http.get('http://din-api-url/api/loans');
+  const response = await page.goto('https://souderbroder-loan-lab.lovable.app/loan');
 
-  check(res, {
-    'status är 200': (r) => r.status === 200,
-  });
+    check(response, {
+      'Status är 200 (OK)': (r) => r.status() === 200,
+    });
 
-  sleep(1);
 }
