@@ -9,7 +9,7 @@ class StartPage:
         )
 
     def go_to_loan(self):
-        # Direktnavigation pga SPA-routing
+         # Direktnavigation pga SPA-routing
         self.page.goto(
             "https://souderbroder-loan-lab.lovable.app/loan",
             wait_until="networkidle"
