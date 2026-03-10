@@ -1,8 +1,11 @@
 import pytest
 from src.api.loan_client import LoanClient
+from src.helpers.testdata import loan_payload
+
+@pytest.fixture(scope="session")
+def api_client():
+    return LoanClient()
 
 @pytest.fixture
-def api_client():
-    """Returnerar en instans av API-klienten för riktiga anrop."""
-    # Ersätt med din faktiska Lovable-URL
-    return LoanClient("https://souderbroder-loan-lab.lovable.app")
+def default_loan_payload():
+    return loan_payload()
