@@ -3,37 +3,29 @@ import { check } from 'k6';
 
 export const options = {
   scenarios: {
-    ui: {
+    gui: {
       executor: 'constant-vus',
-      vus: 3,            // 3 användare samtidigt
-      duration: '10s',    // Kör i 10 sekunder
-      options: {
-        browser: {
-          type: 'chromium',
-        },
-      },
+      vus: 3,
+      duration: '20s',
+      options: { browser: { type: 'chromium' } },
     },
   },
   thresholds: {
-    // Vi sätter 5000ms (5 sekunder) så att testet passerar (blir grönt)
-    browser_web_vital_lcp: ['p(95) < 5000'],
+    browser_web_vital_lcp: ['p(95)<4000'],
   },
 };
 
-// Det är denna "export default" som k6 behöver för att veta vad den ska köra!
 export default async function () {
   const context = await browser.newContext();
   const page = await context.newPage();
+  try {
+    const r1 = await page.goto('https://souderbroder-loan-lab.lovable.app', { waitUntil: 'networkidle' });
+    check(r1, { 'Startsidan – 200': (r) => r && r.status() === 200 });
 
- try {
-    console.log("Navigerar...");
-    await page.goto('https://souderbroder-loan-lab.lovable.app/loan');
-
-    // Ta bilden direkt här!
-    await page.screenshot({ path: 'DEBUG_BILD.png' });
-    console.log("Bild sparad!");
-
+    const r2 = await page.goto('https://souderbroder-loan-lab.lovable.app/loan', { waitUntil: 'networkidle' });
+    check(r2, { 'Lånesidan – 200': (r) => r && r.status() === 200 });
   } finally {
     await page.close();
+    await context.close();
   }
 }

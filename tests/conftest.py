@@ -1,11 +1,8 @@
 import pytest
-from unittest.mock import Mock
+from src.api.loan_client import LoanClient
 
 @pytest.fixture
-def mock_api_response():
-    """Fixture som skapar ett standardiserat mock-svar för API:et."""
-    mock = Mock()
-    mock.status_code = 200
-    mock.headers = {"Content-Type": "application/json"}
-    mock.json.return_value = [{"id": 1, "amount": 5000, "status": "approved"}]
-    return mock
+def api_client():
+    """Returnerar en instans av API-klienten för riktiga anrop."""
+    # Ersätt med din faktiska Lovable-URL
+    return LoanClient("https://souderbroder-loan-lab.lovable.app")
