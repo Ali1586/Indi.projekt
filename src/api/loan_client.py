@@ -1,25 +1,26 @@
-import os
 import requests
-from dotenv import load_dotenv
 
-load_dotenv()
-
+BASE_URL = "https://kzmcpfklrqymzazaxlmv.supabase.co/functions/v1/partner-loan-api"
+API_KEY = "0ae0909526eb8f6563dfac7e6b3a7523aa68bdac57fa7590aae3c9762a99ff25"
 
 class LoanClient:
     def __init__(self):
-        # Hämtar nyckeln och sätter bas-URL
-        self.api_key = os.getenv("API_KEY_PRIMARY")
-        if not self.api_key:
-            # Reserv om .env inte laddas
-            self.api_key = "0ae0909526eb8f6563dfac7e6b3a7523aa68bdac57fa7590aae3c9762a99ff25"
+        self.base_url = BASE_URL
+        self.session = requests.Session()
+        self.session.headers.update({
+            "x-api-key": API_KEY,
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        })
 
-        self.base_url = "https://souderbroder-loan-lab.lovable.app/api"
-
-    # Se till att denna rad börjar på samma nivå som def __init__
     def get_loans(self):
-        headers = {
-            "Authorization": f"Bearer {self.api_key}",
-            "Accept": "application/json"
-        }
-        response = requests.get(f"{self.base_url}/loans", headers=headers)
-        return response
+        return self.session.get(f"{self.base_url}/loans")
+
+    def get_loan(self, loan_id):
+        return self.session.get(f"{self.base_url}/loans/{loan_id}")
+
+    def create_loan(self, payload):
+        return self.session.post(f"{self.base_url}/loans", json=payload)
+
+    def delete_loan(self, loan_id):
+        return self.session.delete(f"{self.base_url}/loans/{loan_id}")

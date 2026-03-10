@@ -1,8 +1,15 @@
-class NavigationBar:
+class ContactPage:
+    URL = "https://souderbroder-loan-lab.lovable.app/contact"
+
     def __init__(self, page):
         self.page = page
-        self.home_link = page.get_by_role("link", name="Hem")
-        self.loan_link = page.get_by_role("link", name="Sök lån")
 
-    def click_home(self):
-        self.home_link.click()
+    def open(self):
+        self.page.goto(self.URL, wait_until="networkidle")
+
+    def is_loaded(self):
+        return "/contact" in self.page.url
+
+    def get_heading(self):
+        h = self.page.locator("h1, h2").first
+        return h.inner_text() if h.count() > 0 else ""
